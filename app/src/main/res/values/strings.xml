@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">UniversityWidget</string>
+    <string name="add_widget">Add widget</string>
+    <string name="first_time">7:45</string>
+    <string name="second_time">9:30</string>
+    <string name="third_time">11:15</string>
+    <string name="fourth_time">13:10</string>
+    <string name="fifth_time">14:55</string>
+    <string name="sixth_time">16:40</string>
+</resources>
