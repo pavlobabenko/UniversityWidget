@@ -4,6 +4,7 @@ import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Base64;
 import android.widget.RemoteViews;
 
@@ -13,6 +14,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -41,7 +44,7 @@ public class WidgetService extends Service {
                 Event[] todayEvents = universityDao.readTodayEvents();
                 int[] allWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
                 AppWidgetUpdater widgetUpdater = new AppWidgetUpdater(WidgetService.this);
-                widgetUpdater.updateWidget(allWidgetIds, todayEvents);
+                widgetUpdater.updateWidget(allWidgetIds, todayEvents, new Date());
                 stopSelf();
             }
         }).start();

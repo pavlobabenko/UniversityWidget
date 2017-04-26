@@ -12,8 +12,7 @@ public class UniversityWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         ComponentName componentName = new ComponentName(context, UniversityWidget.class);
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
-        Intent intent = new Intent(context.getApplicationContext(),
-                WidgetService.class);
+        Intent intent = new Intent(context.getApplicationContext(), WidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
         context.startService(intent);
     }

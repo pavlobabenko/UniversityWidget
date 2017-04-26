@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class UniversityDao {
@@ -75,11 +77,31 @@ public class UniversityDao {
     }
 
     public Event[] readTodayEvents() {
-        Event[] events = new Event[7];
         SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-        String todayString = dateFormat.format(new Date());
-        Cursor queryCursor = database.rawQuery("SELECT events.type,events.number_pair,events.auditory,subjects.brief FROM events,subjects WHERE events.subject_id = subjects.subject_id AND events.start_time = '" + todayString + "';", null);
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 15);
+        Event[] events = new Event[7];
+        String actualDate;
+        if (calendar.before(Calendar.getInstance())) {
+            actualDate = dateFormat.format(new Date(date.getTime()+(1000*60*60*24)));
+        } else {
+            actualDate = dateFormat.format(date);
+        }
+        Cursor queryCursor = database.rawQuery("SELECT events.type,events.number_pair,events.auditory,subjects.brief FROM events,subjects WHERE events.subject_id = subjects.subject_id AND events.start_time = '" + actualDate + "';", null);
+        while (queryCursor.moveToNext()) {
+            events[queryCursor.getInt(queryCursor.getColumnIndex("number_pair"))] = new Event(queryCursor.getInt(queryCursor.getColumnIndex("type")), queryCursor.getString(queryCursor.getColumnIndex("auditory")), queryCursor.getString(queryCursor.getColumnIndex("brief")));
+        }
+        queryCursor.close();
+        database.close();
+        return events;
+    }
+    public Event[] readNextDayEvents(String date) {
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        Event[] events = new Event[7];
+        Cursor queryCursor = database.rawQuery("SELECT events.type,events.number_pair,events.auditory,subjects.brief FROM events,subjects WHERE events.subject_id = subjects.subject_id AND events.start_time = '" + date + "';", null);
         while (queryCursor.moveToNext()) {
             events[queryCursor.getInt(queryCursor.getColumnIndex("number_pair"))] = new Event(queryCursor.getInt(queryCursor.getColumnIndex("type")), queryCursor.getString(queryCursor.getColumnIndex("auditory")), queryCursor.getString(queryCursor.getColumnIndex("brief")));
         }

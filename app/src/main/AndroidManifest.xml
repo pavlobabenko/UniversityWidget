@@ -25,6 +25,10 @@
         <service
             android:name=".WidgetService"
             android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".NextDayService"
+            android:enabled="true"
             android:exported="true"></service>
     </application>
 
